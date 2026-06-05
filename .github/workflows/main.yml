@@ -1,0 +1,28 @@
+name: Cron Test
+
+permissions:
+  contents: write
+
+on:
+  schedule:
+    - cron: "3,13,23,33,43,53 * * * *"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update file
+        run: |
+          date >> log.txt
+
+      - name: Commit
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+          git add log.txt
+          git commit -m "cron update" || echo "nothing to commit"
+          git push
